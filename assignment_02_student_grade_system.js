@@ -50,3 +50,48 @@
 // =============================================================================
 
 
+const readlineSync = require("readline-sync");
+ 
+/**
+ * Returns the letter grade (A, B, C, D, or F) for a given score.
+ *
+ * If the score is outside the valid range of 0-100, returns null so
+ * that main() can detect it and print an appropriate error message.
+ */
+function getGrade(score) {
+  // Validate the score is within the allowed range.
+  if (score < 0 || score > 100) {
+    return null;
+  }
+ 
+  // Determine the letter grade using if / else if / else.
+  let grade;
+  if (score >= 80) {
+    grade = "A";
+  } else if (score >= 70) {
+    grade = "B";
+  } else if (score >= 60) {
+    grade = "C";
+  } else if (score >= 50) {
+    grade = "D";
+  } else {
+    grade = "F";
+  }
+ 
+  return grade;
+}
+ 
+function main() {
+  const score = readlineSync.questionInt("Enter student score (0-100): ");
+ 
+  // Call the function and print the result.
+  const grade = getGrade(score);
+ 
+  if (grade === null) {
+    console.log("Error: Score must be between 0 and 100.");
+  } else {
+    console.log(`Grade: ${grade}`);
+  }
+}
+ 
+main();
