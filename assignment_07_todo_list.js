@@ -82,3 +82,104 @@
 // =============================================================================
 
 
+const readlineSync = require("readline-sync");
+
+let tasks = [];
+
+function showMenu() {
+    console.log("\n============================");
+    console.log("       TO-DO LIST MENU");
+    console.log("============================");
+    console.log("1. Add task");
+    console.log("2. View tasks");
+    console.log("3. Delete task");
+    console.log("4. Quit");
+}
+
+function addTask() {
+    const task = readlineSync.question("Enter task: ").trim();
+
+    if (task === "") {
+        console.log("Error: Task description cannot be empty.");
+        return;
+    }
+
+    tasks.push(task);
+    console.log(`Task added: "${task}"`);
+}
+
+function viewTasks() {
+    if (tasks.length === 0) {
+        console.log("Your task list is empty.");
+        return;
+    }
+
+    console.log("\nYour Tasks:");
+
+    for (let i = 0; i < tasks.length; i++) {
+        console.log(`${i + 1}. ${tasks[i]}`);
+    }
+}
+
+function deleteTask() {
+    if (tasks.length === 0) {
+        console.log("There are no tasks to delete.");
+        return;
+    }
+
+    viewTasks();
+
+    const taskNumber = Number(
+        readlineSync.question("Enter task number to delete: ")
+    );
+
+    if (
+        !Number.isInteger(taskNumber) ||
+        taskNumber < 1 ||
+        taskNumber > tasks.length
+    ) {
+        console.log("Error: Invalid task number.");
+        return;
+    }
+
+    const index = taskNumber - 1;
+    const deletedTask = tasks[index];
+
+    tasks.splice(index, 1);
+
+    console.log(`Task "${deletedTask}" has been removed.`);
+}
+
+function runTodoList() {
+    let running = true;
+
+    while (running) {
+        showMenu();
+
+        const choice = readlineSync.question("Enter your choice (1-4): ");
+
+        switch (choice) {
+            case "1":
+                addTask();
+                break;
+
+            case "2":
+                viewTasks();
+                break;
+
+            case "3":
+                deleteTask();
+                break;
+
+            case "4":
+                console.log("Goodbye!");
+                running = false;
+                break;
+
+            default:
+                console.log("Error: Please choose an option from 1 to 4.");
+        }
+    }
+}
+
+runTodoList();
