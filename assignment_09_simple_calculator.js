@@ -75,3 +75,134 @@
 // =============================================================================
 
 
+const readlineSync = require("readline-sync");
+
+function add(firstNumber, secondNumber) {
+    return firstNumber + secondNumber;
+}
+
+function subtract(firstNumber, secondNumber) {
+    return firstNumber - secondNumber;
+}
+
+function multiply(firstNumber, secondNumber) {
+    return firstNumber * secondNumber;
+}
+
+function divide(firstNumber, secondNumber) {
+    return firstNumber / secondNumber;
+}
+
+function modulus(firstNumber, secondNumber) {
+    return firstNumber % secondNumber;
+}
+
+function exponentiate(firstNumber, secondNumber) {
+    return firstNumber ** secondNumber;
+}
+
+function showMenu() {
+    console.log("\n============================");
+    console.log("      SIMPLE CALCULATOR");
+    console.log("============================");
+    console.log("1. Addition");
+    console.log("2. Subtraction");
+    console.log("3. Multiplication");
+    console.log("4. Division");
+    console.log("5. Modulus");
+    console.log("6. Exponentiation");
+    console.log("7. Quit");
+}
+
+function getOperationSymbol(choice) {
+    switch (choice) {
+        case "1":
+            return "+";
+        case "2":
+            return "-";
+        case "3":
+            return "*";
+        case "4":
+            return "/";
+        case "5":
+            return "%";
+        case "6":
+            return "**";
+        default:
+            return "";
+    }
+}
+
+function calculate(choice, firstNumber, secondNumber) {
+    switch (choice) {
+        case "1":
+            return add(firstNumber, secondNumber);
+        case "2":
+            return subtract(firstNumber, secondNumber);
+        case "3":
+            return multiply(firstNumber, secondNumber);
+        case "4":
+            return divide(firstNumber, secondNumber);
+        case "5":
+            return modulus(firstNumber, secondNumber);
+        case "6":
+            return exponentiate(firstNumber, secondNumber);
+        default:
+            return null;
+    }
+}
+
+function runCalculator() {
+    let running = true;
+
+    while (running) {
+        showMenu();
+
+        const choice = readlineSync.question("Select an operation (1-7): ");
+
+        if (choice === "7") {
+            console.log("Goodbye!");
+            running = false;
+            continue;
+        }
+
+        if (!["1", "2", "3", "4", "5", "6"].includes(choice)) {
+            console.log("Error: Please select a valid operation from 1 to 7.");
+            continue;
+        }
+
+        const firstNumber = Number(
+            readlineSync.question("Enter first number: ")
+        );
+        const secondNumber = Number(
+            readlineSync.question("Enter second number: ")
+        );
+
+        if (!Number.isFinite(firstNumber) || !Number.isFinite(secondNumber)) {
+            console.log("Error: Please enter valid numbers.");
+            continue;
+        }
+
+        if (
+            (choice === "4" || choice === "5") &&
+            secondNumber === 0
+        ) {
+            if (choice === "4") {
+                console.log("Error: Cannot divide by zero.");
+            } else {
+                console.log("Error: Cannot calculate a modulus by zero.");
+            }
+
+            continue;
+        }
+
+        const result = calculate(choice, firstNumber, secondNumber);
+        const symbol = getOperationSymbol(choice);
+
+        console.log(
+            `Result: ${firstNumber} ${symbol} ${secondNumber} = ${result.toFixed(2)}`
+        );
+    }
+}
+
+runCalculator();
